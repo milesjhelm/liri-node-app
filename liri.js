@@ -7,6 +7,7 @@
 // Load the fs package to read and write
 var fs = require("fs");
 var request = require("request");
+var twitter = require("twitter");
 var keys = require("./keys.js");
 
 
@@ -73,6 +74,22 @@ switch (action) {
 
 function tweets() {
   console.log("tweets");
+  var params = {screen_name: 'Esiole229'};
+  // var twitterKeys = keys.twitterKeys;
+  var client = new twitter(keys.twitterKeys);
+  client.get('statuses/user_timeline', params, function(error, tweets, response) {
+    if (!error) {
+      
+        for(var i = 0; i < tweets.length; i++) {
+          console.log('\n' + "@" + params.screen_name + " tweeted " + tweets[i].text + ' at ' + tweets[i].created_at +'\n');
+        }
+    }
+
+    else {
+      console.log("tweet error")
+    }
+  });
+
 }
 
 
@@ -81,6 +98,8 @@ function spotify() {
 }
 
 
+
+//
 function movie() {
 
   if (valueEntered === false) {
@@ -91,8 +110,6 @@ function movie() {
   // If the request is successful (i.e. if the response status code is 200)
   if (!error && response.statusCode === 200) {
 
-    // Parse the body of the site and recover just the imdbRating
-    // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
     console.log("Title: " + JSON.parse(body).Title);
     console.log("Country: " + JSON.parse(body).Country);
     console.log("Released: " + JSON.parse(body).Released);
